@@ -1,0 +1,30 @@
+{
+  "name": "auraform",
+  "version": "0.0.1",
+  "description": "Lightweight schema-driven form library for React with strong TypeScript type inference.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/praveensaga/auraform.git"
+  },
+  "homepage": "https://github.com/praveensaga/auraform",
+  "bugs": {
+    "url": "https://github.com/praveensaga/auraform/issues"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^25.9.3",
+    "tsup": "^8.5.1",
+    "typescript": "5.9"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit"
+  },
+  "files": [
+    "dist"
+  ]
+}
