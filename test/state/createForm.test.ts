@@ -244,5 +244,45 @@ describe('createForm values and getters', () => {
     form.validate();
     expect(form.getState().errors).toEqual({});
   });
+
+  it('verifies getState() returns a stable reference unless mutated', () => {
+    const schema = {
+      name: textField({ defaultValue: 'Alice', validators: [required()] }),
+      age: numberField({ defaultValue: 25 }),
+    };
+    const form = createForm(schema);
+
+    // 1. Two calls to getState() return the exact same reference
+    const state1 = form.getState();
+    const state2 = form.getState();
+    expect(state1).toBe(state2);
+
+    // 2. Modifying a value results in a new state reference
+    form.setValue('name', 'Bob');
+    const state3 = form.getState();
+    expect(state3).not.toBe(state1);
+
+    // Two calls after modification still return the same reference
+    const state4 = form.getState();
+    expect(state3).toBe(state4);
+
+    // 3. Validation that modifies errors results in a new state reference
+    // Trigger validation error
+    form.setValue('name', '');
+    const statePreValidate = form.getState();
+    form.validate();
+    const statePostValidate = form.getState();
+    expect(statePostValidate).not.toBe(statePreValidate);
+    expect(statePostValidate.errors.name).toBeDefined();
+
+    // Two calls after validation still return the same reference
+    expect(form.getState()).toBe(statePostValidate);
+
+    // 4. Calling reset results in a new state reference
+    form.reset();
+    const statePostReset = form.getState();
+    expect(statePostReset).not.toBe(statePostValidate);
+    expect(form.getState()).toBe(statePostReset);
+  });
 });
 

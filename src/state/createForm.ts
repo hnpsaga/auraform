@@ -56,7 +56,7 @@ export function createForm<TSchema extends Record<string, any>>(
     dirty[key] = false;
   }
 
-  const state: FormState<TValues> = {
+  let state: FormState<TValues> = {
     values: { ...initialValues },
     errors: {},
     touched,
@@ -66,14 +66,7 @@ export function createForm<TSchema extends Record<string, any>>(
   const listeners = new Set<Listener<TValues>>();
 
   const notify = () => {
-    Array.from(listeners).forEach((l) =>
-      l({
-        values: state.values,
-        errors: state.errors,
-        touched: state.touched,
-        dirty: state.dirty,
-      }),
-    );
+    Array.from(listeners).forEach((l) => l(state));
   };
 
   return {
@@ -93,9 +86,12 @@ export function createForm<TSchema extends Record<string, any>>(
       const nextDirty = value !== initialValues[field];
 
       if (prevVal !== nextVal || prevTouched !== nextTouched || prevDirty !== nextDirty) {
-        state.values = { ...state.values, [field]: nextVal };
-        state.touched = { ...state.touched, [field]: nextTouched };
-        state.dirty = { ...state.dirty, [field]: nextDirty };
+        state = {
+          values: { ...state.values, [field]: nextVal },
+          touched: { ...state.touched, [field]: nextTouched },
+          dirty: { ...state.dirty, [field]: nextDirty },
+          errors: state.errors,
+        };
 
         notify();
       }
@@ -105,22 +101,27 @@ export function createForm<TSchema extends Record<string, any>>(
       const result = validateForm(schema as any, state.values as any);
       const changed = errorsChanged(state.errors, result.errors);
       if (changed) {
-        state.errors = result.errors;
+        state = {
+          ...state,
+          errors: result.errors,
+        };
         notify();
       }
       return result;
     },
     reset() {
-      state.values = { ...initialValues };
-      state.errors = {};
       const nextTouched = {} as Record<keyof TValues, boolean>;
       const nextDirty = {} as Record<keyof TValues, boolean>;
       for (const key of Object.keys(schema) as (keyof TValues & string)[]) {
         nextTouched[key] = false;
         nextDirty[key] = false;
       }
-      state.touched = nextTouched;
-      state.dirty = nextDirty;
+      state = {
+        values: { ...initialValues },
+        errors: {},
+        touched: nextTouched,
+        dirty: nextDirty,
+      };
       notify();
     },
     subscribe(listener) {
@@ -133,12 +134,7 @@ export function createForm<TSchema extends Record<string, any>>(
       listeners.delete(listener);
     },
     getState() {
-      return {
-        values: { ...state.values },
-        errors: { ...state.errors },
-        touched: { ...state.touched },
-        dirty: { ...state.dirty },
-      };
+      return state;
     },
   };
 }
