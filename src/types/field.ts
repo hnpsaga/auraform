@@ -17,14 +17,15 @@ export interface CheckboxField extends BaseField<boolean> {
   readonly type: 'checkbox';
 }
 
-export interface SelectOption {
+export interface SelectOption<TValue extends string = string> {
   readonly label: string;
-  readonly value: string;
+  readonly value: TValue;
 }
 
-export interface SelectField extends BaseField<string> {
+export interface SelectField<TValue extends string = string>
+  extends BaseField<TValue> {
   readonly type: 'select';
-  readonly options: readonly SelectOption[];
+  readonly options: readonly SelectOption<TValue>[];
 }
 
 export type FormField = TextField | NumberField | CheckboxField | SelectField;
