@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FormInstance, FormState, Listener } from './types.js';
 import type { InferValues } from '../types/inference.js';
 
 function getDefaultValue(field: any): any {
+  if (!field) return undefined;
   if (field.defaultValue !== undefined) {
     return field.defaultValue;
   }
@@ -53,7 +54,26 @@ export function createForm<TSchema extends Record<string, any>>(
       return state.values[field];
     },
     setValue(field, value) {
-      // Task 3
+      const prevVal = state.values[field];
+      const prevTouched = state.touched[field];
+      const prevDirty = state.dirty[field];
+
+      const nextVal = value;
+      const nextTouched = true;
+      const nextDirty = value !== initialValues[field];
+
+      if (prevVal !== nextVal || prevTouched !== nextTouched || prevDirty !== nextDirty) {
+        state.values[field] = nextVal;
+        state.touched[field] = nextTouched;
+        state.dirty[field] = nextDirty;
+
+        listeners.forEach(l => l({
+          values: { ...state.values },
+          errors: { ...state.errors },
+          touched: { ...state.touched },
+          dirty: { ...state.dirty },
+        }));
+      }
     },
     validate() {
       // Task 6
@@ -62,11 +82,11 @@ export function createForm<TSchema extends Record<string, any>>(
     reset() {
       // Task 5
     },
-    subscribe(listener) {
+    subscribe(_listener) {
       // Task 4
       return () => {};
     },
-    unsubscribe(listener) {
+    unsubscribe(_listener) {
       // Task 4
     },
   };
