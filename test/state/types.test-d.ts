@@ -18,4 +18,10 @@ test('FormState and FormInstance type constraints', () => {
     touched: Record<keyof Values, boolean>;
     dirty: Record<keyof Values, boolean>;
   }>();
+
+  expectTypeOf<FormInstance<Schema>>().toMatchTypeOf<{
+    getValues(): Values;
+    getValue<K extends keyof Values>(field: K): Values[K];
+    setValue<K extends keyof Values>(field: K, value: Values[K]): void;
+  }>();
 });
