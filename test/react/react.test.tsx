@@ -51,7 +51,13 @@ describe('useForm and useField hooks', () => {
     const NameField = () => {
       nameRenderCount++;
       const name = useField(form, 'name');
-      return <input data-testid="name-input" value={name.value} onChange={(e) => name.setValue(e.target.value)} />;
+      return (
+        <input
+          data-testid="name-input"
+          value={name.value}
+          onChange={(e) => name.setValue(e.target.value)}
+        />
+      );
     };
 
     const AgeField = () => {
@@ -64,7 +70,7 @@ describe('useForm and useField hooks', () => {
       <div>
         <NameField />
         <AgeField />
-      </div>
+      </div>,
     );
 
     expect(nameRenderCount).toBe(1);
@@ -88,12 +94,20 @@ describe('useForm and useField hooks', () => {
 
       return (
         <div>
-          <input data-testid="email" value={email.value} onChange={(e) => email.setValue(e.target.value)} />
-          <button data-testid="validate" onClick={() => form.validate()}>Validate</button>
+          <input
+            data-testid="email"
+            value={email.value}
+            onChange={(e) => email.setValue(e.target.value)}
+          />
+          <button data-testid="validate" onClick={() => form.validate()}>
+            Validate
+          </button>
           <div data-testid="errors">{email.errors.join(', ')}</div>
           <div data-testid="dirty">{email.dirty ? 'dirty' : 'clean'}</div>
           <div data-testid="touched">{email.touched ? 'touched' : 'untouched'}</div>
-          <button data-testid="reset" onClick={() => form.reset()}>Reset</button>
+          <button data-testid="reset" onClick={() => form.reset()}>
+            Reset
+          </button>
         </div>
       );
     };
@@ -148,4 +162,3 @@ describe('useForm and useField hooks', () => {
     expect(typeTest).toBeDefined();
   });
 });
-

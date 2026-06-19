@@ -12,12 +12,7 @@ export function useForm<TSchema extends Record<string, any>>(
   }
   const form = formRef.current;
 
-  useSyncExternalStore(
-    form.subscribe,
-    form.getState,
-    form.getState,
-  );
+  useSyncExternalStore(form.subscribe, form.getState, form.getState);
 
   return form;
 }
-
