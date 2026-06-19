@@ -7,3 +7,4 @@ export type {
   SelectField,
   FormField,
 } from './field.js';
+export type { InferField, InferValues } from './inference.js';
