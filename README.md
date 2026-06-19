@@ -1,4 +1,4 @@
-# AuraForm
+# MakeForm
 
 Lightweight schema-driven form library for React with strong TypeScript type inference.
 

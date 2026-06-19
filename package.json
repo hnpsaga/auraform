@@ -1,14 +1,14 @@
 {
-  "name": "auraform",
+  "name": "@saga/makeform",
   "version": "0.0.1",
   "description": "Lightweight schema-driven form library for React with strong TypeScript type inference.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/praveensaga/auraform.git"
+    "url": "git+https://github.com/hnpsaga/@saga/makeform.git"
   },
-  "homepage": "https://github.com/praveensaga/auraform",
+  "homepage": "https://github.com/hnpsaga/@saga/makeform",
   "bugs": {
-    "url": "https://github.com/praveensaga/auraform/issues"
+    "url": "https://github.com/hnpsaga/@saga/makeform/issues"
   },
   "license": "MIT",
   "devDependencies": {
