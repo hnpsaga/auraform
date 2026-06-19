@@ -1,5 +1,5 @@
 {
-  "name": "@saga/makeform",
+  "name": "@hnpsaga/makeform",
   "version": "0.0.1",
   "description": "Lightweight schema-driven form library for React with strong TypeScript type inference.",
   "repository": {
