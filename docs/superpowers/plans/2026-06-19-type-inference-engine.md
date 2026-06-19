@@ -13,6 +13,7 @@
 ### Task 1: Basic Type Inference Types and Exports
 
 **Files:**
+
 - Create: `src/types/inference.ts`
 - Modify: `src/types/index.ts`
 - Create: `test/type-inference.test.ts`
@@ -23,12 +24,7 @@ Create the file `test/type-inference.test.ts` with tests for basic field types a
 
 ```typescript
 import { expectTypeOf, test } from 'vitest';
-import {
-  textField,
-  numberField,
-  checkboxField,
-  selectField,
-} from '../src/index.js';
+import { textField, numberField, checkboxField, selectField } from '../src/index.js';
 import type { InferField, InferValues } from '../src/index.js';
 
 test('single field inference maps core fields to their types', () => {
@@ -107,6 +103,7 @@ git commit -m "feat: implement basic type inference types and exports"
 ### Task 2: Select Field Literal Union Inference
 
 **Files:**
+
 - Modify: `test/type-inference.test.ts`
 - Modify: `src/types/field.ts`
 - Modify: `src/fields/select.ts`
@@ -157,7 +154,7 @@ import type { SelectField } from '../types/field.js';
 export type SelectFieldConfig<TValue extends string = string> = Omit<SelectField<TValue>, 'type'>;
 
 export function selectField<const TValue extends string>(
-  config: SelectFieldConfig<TValue>
+  config: SelectFieldConfig<TValue>,
 ): SelectField<TValue> {
   return {
     type: 'select',

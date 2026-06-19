@@ -32,9 +32,7 @@ test('multi-field schema inference maps keys to field types', () => {
 });
 
 test('select field literal union inference works', () => {
-  expectTypeOf<InferField<SelectFieldLiteral>>().toEqualTypeOf<
-    'admin' | 'user'
-  >();
+  expectTypeOf<InferField<SelectFieldLiteral>>().toEqualTypeOf<'admin' | 'user'>();
 });
 
 test('multi-field schema with select literal inference works', () => {
@@ -54,4 +52,3 @@ test('multi-field schema with select literal inference works', () => {
     role: 'admin' | 'user';
   }>();
 });
-

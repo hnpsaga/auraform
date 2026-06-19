@@ -16,9 +16,7 @@ import type { BaseField } from './field.js';
  * @limitation
  * If a field type does not extend `BaseField<TValue>`, inference yields `never`.
  */
-export type InferField<TField> = TField extends BaseField<infer TValue>
-  ? TValue
-  : never;
+export type InferField<TField> = TField extends BaseField<infer TValue> ? TValue : never;
 
 /**
  * Infers the value types of an entire form schema object.

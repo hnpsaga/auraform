@@ -22,8 +22,7 @@ export interface SelectOption<TValue extends string = string> {
   readonly value: TValue;
 }
 
-export interface SelectField<TValue extends string = string>
-  extends BaseField<TValue> {
+export interface SelectField<TValue extends string = string> extends BaseField<TValue> {
   readonly type: 'select';
   readonly options: readonly SelectOption<TValue>[];
 }
