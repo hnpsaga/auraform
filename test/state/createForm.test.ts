@@ -284,4 +284,25 @@ describe('createForm values and getters', () => {
     expect(statePostReset).not.toBe(statePostValidate);
     expect(form.getState()).toBe(statePostReset);
   });
+
+  it('protects getState() snapshots from external mutation', () => {
+    const schema = {
+      name: textField({ defaultValue: 'Alice', validators: [required()] }),
+    };
+    const form = createForm(schema);
+
+    form.setValue('name', '');
+    form.validate();
+    const state = form.getState();
+
+    expect(() => {
+      state.values.name = 'Mallory';
+    }).toThrow(TypeError);
+    expect(() => {
+      state.errors.name!.push('Injected error');
+    }).toThrow(TypeError);
+
+    expect(form.getValue('name')).toBe('');
+    expect(form.getState().errors.name).toEqual(['Field is required']);
+  });
 });
