@@ -178,3 +178,95 @@ type ValidationResult = {
   errors: Record<string, string[]>;
 };
 ```
+
+## Form State Engine
+
+Manage form state reactively using a framework-agnostic form controller.
+
+### `createForm(schema)`
+
+Initializes the form state engine with a schema, returning a form instance. Initial values are derived from `defaultValue` on the field configs, or fall back to:
+
+- `text`: `''`
+- `number`: `0`
+- `checkbox`: `false`
+- `select`: The value of the first option, or `''`
+
+```ts
+import { createForm, textField, numberField, checkboxField } from '@hnpsaga/makeform';
+
+const schema = {
+  name: textField({ defaultValue: 'Alice' }),
+  age: numberField({ label: 'Age' }),
+  acceptedTerms: checkboxField({ label: 'Terms and Conditions' }),
+};
+
+const form = createForm(schema);
+```
+
+### Form Instance API
+
+A form instance returned by `createForm` exposes the following methods:
+
+#### `getValues()`
+
+Retrieves a copy of the current values of all fields.
+
+```ts
+const values = form.getValues();
+// { name: 'Alice', age: 0, acceptedTerms: false }
+```
+
+#### `getValue(field)`
+
+Retrieves the current value of a single field.
+
+```ts
+const name = form.getValue('name'); // 'Alice'
+```
+
+#### `setValue(field, value)`
+
+Sets the value of a single field. This automatically marks the field as `touched` and updates its `dirty` flag (calculated by comparing the new value to its initial value). If any state actually changed, all active subscribers are notified.
+
+```ts
+form.setValue('name', 'Bob');
+form.setValue('age', 25);
+```
+
+#### `validate()`
+
+Validates all fields using the schema's validators. If the validation errors change, the form's `errors` state is updated and subscribers are notified. Returns a `ValidationResult`.
+
+```ts
+const result = form.validate();
+// { valid: true, errors: {} }
+```
+
+#### `reset()`
+
+Resets the form values back to their initial state, clears all errors, and resets the `touched` and `dirty` states of all fields to `false`. Subscribers are notified.
+
+```ts
+form.reset();
+```
+
+#### `subscribe(listener)`
+
+Subscribes to form state changes. The listener is called with the current `FormState` whenever `values`, `errors`, `touched`, or `dirty` flags update. Returns an unsubscribe function.
+
+```ts
+const unsubscribe = form.subscribe((state) => {
+  console.log('Form State Updated:', state);
+  // state structure:
+  // {
+  //   values: { name: 'Alice', age: 25, acceptedTerms: false },
+  //   errors: { age: ['Minimum value is 18'] },
+  //   touched: { name: true, age: true, acceptedTerms: false },
+  //   dirty: { name: false, age: true, acceptedTerms: false }
+  // }
+});
+
+// Call the returned function to unsubscribe
+unsubscribe();
+```
