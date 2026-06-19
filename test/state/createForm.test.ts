@@ -285,4 +285,3 @@ describe('createForm values and getters', () => {
     expect(form.getState()).toBe(statePostReset);
   });
 });
-
