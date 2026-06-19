@@ -23,6 +23,7 @@ function getDefaultValue(field: any): any {
 }
 
 function errorsChanged(a: Record<string, string[]>, b: Record<string, string[]>): boolean {
+  if (a === b) return false;
   const keysA = Object.keys(a);
   const keysB = Object.keys(b);
   if (keysA.length !== keysB.length) return true;
