@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createForm } from '../../src/state/createForm.js';
 import type { FormState } from '../../src/state/types.js';
 import { textField, numberField, checkboxField, selectField } from '../../src/index.js';
+import { required } from '../../src/validation/validators.js';
 
 describe('createForm values and getters', () => {
   it('resolves schema default values correctly', () => {
@@ -131,16 +132,49 @@ describe('createForm values and getters', () => {
     const form = createForm(schema);
 
     form.setValue('name', 'Bob');
-    expect(form.getValues().name).toBe('Bob');
 
-    let notified = false;
-    form.subscribe(() => {
-      notified = true;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let lastState: any = null;
+    form.subscribe((s) => {
+      lastState = s;
     });
 
     form.reset();
 
     expect(form.getValues().name).toBe('Alice');
-    expect(notified).toBe(true);
+    expect(lastState).not.toBeNull();
+    expect(lastState?.values.name).toBe('Alice');
+    expect(lastState?.touched.name).toBe(false);
+    expect(lastState?.dirty.name).toBe(false);
+    expect(lastState?.errors).toEqual({});
+  });
+
+  it('runs validation, updates error state, and notifies on changes', () => {
+    const schema = {
+      name: textField({ validators: [required()] }),
+    };
+    const form = createForm(schema);
+
+    let notifyCount = 0;
+    form.subscribe(() => {
+      notifyCount++;
+    });
+
+    // Initial validation -> invalid (empty string is default)
+    const result = form.validate();
+    expect(result.valid).toBe(false);
+    expect(result.errors.name).toContain('Field is required');
+    expect(notifyCount).toBe(1);
+
+    // Validate again with same error -> no notify
+    form.validate();
+    expect(notifyCount).toBe(1);
+
+    // Set valid value and validate -> valid, error cleared, notifies
+    form.setValue('name', 'Bob'); //setValue itself notifies once -> notifyCount = 2
+    const result2 = form.validate();
+    expect(result2.valid).toBe(true);
+    expect(result2.errors.name).toBeUndefined();
+    expect(notifyCount).toBe(3);
   });
 });

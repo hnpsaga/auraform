@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FormInstance, FormState, Listener } from './types.js';
 import type { InferValues } from '../types/inference.js';
+import { validateForm } from '../validation/validateForm.js';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getDefaultValue(field: any): any {
   if (!field) return undefined;
   if (field.defaultValue !== undefined) {
@@ -21,6 +22,22 @@ function getDefaultValue(field: any): any {
   }
 }
 
+function errorsChanged(a: Record<string, string[]>, b: Record<string, string[]>): boolean {
+  const keysA = Object.keys(a);
+  const keysB = Object.keys(b);
+  if (keysA.length !== keysB.length) return true;
+  for (const key of keysA) {
+    const errA = a[key] || [];
+    const errB = b[key] || [];
+    if (errA.length !== errB.length) return true;
+    for (let i = 0; i < errA.length; i++) {
+      if (errA[i] !== errB[i]) return true;
+    }
+  }
+  return false;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createForm<TSchema extends Record<string, any>>(
   schema: TSchema
 ): FormInstance<TSchema> {
@@ -46,6 +63,15 @@ export function createForm<TSchema extends Record<string, any>>(
 
   const listeners = new Set<Listener<TValues>>();
 
+  const notify = () => {
+    listeners.forEach(l => l({
+      values: { ...state.values },
+      errors: { ...state.errors },
+      touched: { ...state.touched },
+      dirty: { ...state.dirty },
+    }));
+  };
+
   return {
     getValues() {
       return { ...state.values };
@@ -67,31 +93,31 @@ export function createForm<TSchema extends Record<string, any>>(
         state.touched[field] = nextTouched;
         state.dirty[field] = nextDirty;
 
-        listeners.forEach(l => l({
-          values: { ...state.values },
-          errors: { ...state.errors },
-          touched: { ...state.touched },
-          dirty: { ...state.dirty },
-        }));
+        notify();
       }
     },
     validate() {
-      // Task 6
-      return { valid: true, errors: {} };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const result = validateForm(schema as any, state.values as any);
+      const changed = errorsChanged(state.errors, result.errors);
+      if (changed) {
+        state.errors = result.errors;
+        notify();
+      }
+      return result;
     },
     reset() {
       state.values = { ...initialValues };
       state.errors = {};
+      const nextTouched = {} as Record<keyof TValues, boolean>;
+      const nextDirty = {} as Record<keyof TValues, boolean>;
       for (const key of Object.keys(schema) as (keyof TValues & string)[]) {
-        state.touched[key] = false;
-        state.dirty[key] = false;
+        nextTouched[key] = false;
+        nextDirty[key] = false;
       }
-      listeners.forEach(l => l({
-        values: { ...state.values },
-        errors: { ...state.errors },
-        touched: { ...state.touched },
-        dirty: { ...state.dirty },
-      }));
+      state.touched = nextTouched;
+      state.dirty = nextDirty;
+      notify();
     },
     subscribe(listener) {
       listeners.add(listener);
@@ -104,3 +130,4 @@ export function createForm<TSchema extends Record<string, any>>(
     },
   };
 }
+
