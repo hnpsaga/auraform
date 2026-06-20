@@ -2,3 +2,7 @@ export { textField, type TextFieldConfig } from './text.js';
 export { numberField, type NumberFieldConfig } from './number.js';
 export { checkboxField, type CheckboxFieldConfig } from './checkbox.js';
 export { selectField, type SelectFieldConfig } from './select.js';
+export { textareaField, type TextareaFieldConfig } from './textarea.js';
+export { emailField, type EmailFieldConfig } from './email.js';
+export { dateField, type DateFieldConfig } from './date.js';
+export { phoneField, type PhoneFieldConfig } from './phone.js';
