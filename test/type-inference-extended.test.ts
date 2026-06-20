@@ -1,6 +1,6 @@
 import { expectTypeOf, test } from 'vitest';
-import type { InferField } from '../src/index.js';
 import type {
+  InferField,
   TextareaField,
   EmailField,
   DateField,
@@ -8,7 +8,7 @@ import type {
   RadioField,
   MultiSelectField,
   CustomField,
-} from '../src/types/field.js';
+} from '../src/index.js';
 
 test('extended single field inference works', () => {
   expectTypeOf<InferField<TextareaField>>().toEqualTypeOf<string>();

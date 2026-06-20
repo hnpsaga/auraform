@@ -702,7 +702,7 @@ graph TD
 
 - Modify: [src/types/index.ts](file:///home/hnpsaga/projects/makeform/src/types/index.ts)
 
-- [ ] **Step 1: Check imports in test file**
+- [x] **Step 1: Check imports in test file**
       Modify type-inference test file to import new field types from main entrypoint rather than raw types directory.
       Update [test/type-inference-extended.test.ts](file:///home/hnpsaga/projects/makeform/test/type-inference-extended.test.ts):
   ```diff
@@ -729,10 +729,10 @@ graph TD
   +  CustomField,
   +} from '../src/index.js';
   ```
-- [ ] **Step 2: Run typecheck to verify it fails**
+- [x] **Step 2: Run typecheck to verify it fails**
       Run: `npm run typecheck`
       Expected: FAIL on cannot find module exports from index
-- [ ] **Step 3: Update `src/types/index.ts` to export all new fields**
+- [x] **Step 3: Update `src/types/index.ts` to export all new fields**
       Modify [src/types/index.ts](file:///home/hnpsaga/projects/makeform/src/types/index.ts):
   ```diff
   --- a/src/types/index.ts
@@ -756,10 +756,10 @@ graph TD
   +} from './field.js';
    export type { InferField, InferValues } from './inference.js';
   ```
-- [ ] **Step 4: Run typecheck to verify it passes**
+- [x] **Step 4: Run typecheck to verify it passes**
       Run: `npm run typecheck`
       Expected: PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
   ```bash
   git add src/types/index.ts test/type-inference-extended.test.ts
   git commit -m "feat: export extended field types from index"
