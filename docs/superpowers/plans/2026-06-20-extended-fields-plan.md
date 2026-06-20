@@ -471,7 +471,7 @@ graph TD
 - Modify: [src/validation/index.ts](file:///home/hnpsaga/projects/makeform/src/validation/index.ts)
 - Test: [test/validation/extended-validators.test.ts](file:///home/hnpsaga/projects/makeform/test/validation/extended-validators.test.ts)
 
-- [ ] **Step 1: Write failing tests for email and phone validators**
+- [x] **Step 1: Write failing tests for email and phone validators**
       Create `test/validation/extended-validators.test.ts`:
 
   ```ts
@@ -513,10 +513,10 @@ graph TD
   });
   ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
       Run: `npm run test`
       Expected: FAIL
-- [ ] **Step 3: Implement new validators in `src/validation/validators.ts`**
+- [x] **Step 3: Implement new validators in `src/validation/validators.ts`**
       Modify [src/validation/validators.ts](file:///home/hnpsaga/projects/makeform/src/validation/validators.ts):
   ```diff
   --- a/src/validation/validators.ts
@@ -556,10 +556,10 @@ graph TD
    export { required, min, max, pattern, custom } from './validators.js';
   +export { email, phone } from './validators.js';
   ```
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
       Run: `npm run test`
       Expected: PASS
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
   ```bash
   git add src/validation/validators.ts src/validation/index.ts test/validation/extended-validators.test.ts
   git commit -m "feat: add email and phone validators"
