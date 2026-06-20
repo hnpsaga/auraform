@@ -1,5 +1,6 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, expectTypeOf } from 'vitest';
 import { customField } from '../../src/index.js';
+import type { CustomField } from '../../src/types/field.js';
 
 describe('custom field builder', () => {
   test('customField sets correct type and wraps custom generic type', () => {
@@ -13,5 +14,6 @@ describe('custom field builder', () => {
     });
     expect(field.type).toBe('custom');
     expect(field.defaultValue).toEqual({ lat: 0, lng: 0 });
+    expectTypeOf(field).toEqualTypeOf<CustomField<Geo>>();
   });
 });
