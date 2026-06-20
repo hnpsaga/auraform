@@ -773,7 +773,7 @@ graph TD
 
 - Modify: [README.md](file:///home/hnpsaga/projects/makeform/README.md)
 
-- [ ] **Step 1: Document new field builders and validators in README**
+- [x] **Step 1: Document new field builders and validators in README**
       Modify [README.md](file:///home/hnpsaga/projects/makeform/README.md) to add documentation and examples for `textareaField`, `emailField`, `dateField`, `phoneField`, `radioField`, `multiSelectField`, `customField`, `email()`, and `phone()`.
   ```diff
   --- a/README.md
@@ -784,10 +784,10 @@ graph TD
   +| `phone(msg?)`          | `string`   | Fails if value is not a valid phone number                        |
    | `min(n)`               | `string`   | Fails if string length < `n`                                      |
   ```
-- [ ] **Step 2: Run prettier to verify format**
+- [x] **Step 2: Run prettier to verify format**
       Run: `npx prettier --check .`
       Expected: PASS
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
   ```bash
   git add README.md
   git commit -m "docs: document extended fields and validators in README"
