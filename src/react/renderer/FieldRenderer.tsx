@@ -228,11 +228,7 @@ export function FieldRenderer<
 
   const fieldRendererOverride = renderFieldRendererOverride();
   if (fieldRendererOverride) {
-    return (
-      <div className={mergeClasses('mf-field', classNames?.field)} data-field={name}>
-        {fieldRendererOverride}
-      </div>
-    );
+    return <>{fieldRendererOverride}</>;
   }
 
   const isCheckbox = field.type === 'checkbox';

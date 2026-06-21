@@ -476,6 +476,58 @@ describe('FieldRenderer — fieldRenderers', () => {
   });
 });
 
+// ─── Field Renderer Wrapper Tests ────────────────────────────────────────────
+// When fieldRenderers is used, the field renderer owns all presentation.
+// MakeForm must not wrap the output in mf-field or apply classNames.field.
+
+describe('fieldRenderers — presentation ownership', () => {
+  it('does not render mf-field wrapper when fieldRenderers is used', () => {
+    const schema = { name: textField({ label: 'Name' }) };
+    function Test() {
+      const form = useForm(schema);
+      return (
+        <FormRenderer form={form} schema={schema} fieldRenderers={{ text: SimpleTextRenderer }} />
+      );
+    }
+    render(<Test />);
+    expect(screen.getByTestId('fr-text-input')).toBeTruthy();
+    expect(screen.queryByTestId('fr-text-input')?.closest('.mf-field')).toBeNull();
+  });
+
+  it('still renders mf-field wrapper for default renderer path', () => {
+    const schema = { name: textField({ label: 'Name' }) };
+    function Test() {
+      const form = useForm(schema);
+      return <FormRenderer form={form} schema={schema} />;
+    }
+    render(<Test />);
+    expect(screen.getByText('Name')).toBeTruthy();
+    const label = screen.getByText('Name');
+    expect(label.closest('.mf-field')).toBeTruthy();
+  });
+
+  it('still renders mf-field wrapper when using renderers (not fieldRenderers)', () => {
+    function CustomInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+      return (
+        <input
+          data-testid="custom-input"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      );
+    }
+    const schema = { name: textField({ label: 'Name' }) };
+    function Test() {
+      const form = useForm(schema);
+      return (
+        <FormRenderer form={form} schema={schema} renderers={{ text: CustomInput as never }} />
+      );
+    }
+    render(<Test />);
+    expect(screen.getByTestId('custom-input').closest('.mf-field')).toBeTruthy();
+  });
+});
+
 // ─── Type Tests ──────────────────────────────────────────────────────────────
 
 describe('FieldRenderers — type safety', () => {
