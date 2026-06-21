@@ -336,24 +336,3 @@ The custom renderer displays errors through the standard `mf-error` container re
 **Type your fields.** Always provide a type parameter to `customField<T>()`. This ensures the `value`, `setValue`, and `InferValues` are correctly typed.
 
 **Avoid `className` assumptions.** Custom renderers do not receive the `classNames` prop. Style your custom renderer independently.
-
-**Test with `FieldRenderer`.** You can render a single custom field using `FieldRenderer` for isolated testing:
-
-```tsx
-import { FieldRenderer, useForm, customField } from '@hnpsaga/makeform';
-import type { FormField } from '@hnpsaga/makeform';
-
-function Test() {
-  const form = useForm({ bio: customField({ component: 'richText' }) });
-  return (
-    <FieldRenderer
-      form={form}
-      name="bio"
-      field={form.getState().values.bio as unknown as FormField}
-      renderers={{
-        custom: { richText: RichTextEditor },
-      }}
-    />
-  );
-}
-```

@@ -33,6 +33,8 @@ You must import the CSS file in your application entry point. The styles are not
 
 The `ClassNames` interface maps each themeable element to a custom CSS class string.
 
+Styling overrides append custom classes rather than replacing MakeForm's default classes. This allows you to extend the default theme while preserving built-in styling and behavior.
+
 ```tsx
 import type { ClassNames } from '@hnpsaga/makeform';
 
@@ -185,7 +187,7 @@ function MuiTextRenderer({
 <FormRenderer form={form} schema={schema} renderers={{ text: MuiTextRenderer }} />;
 ```
 
-Custom renderers (via `customField`) receive the `classNames` prop — see the [Custom Renderers](./custom-renderers.md) guide.
+Custom renderers manage their own styling independently. see the [Custom Renderers](./custom-renderers.md) guide.
 
 ## Choosing the Right Customization Strategy
 
