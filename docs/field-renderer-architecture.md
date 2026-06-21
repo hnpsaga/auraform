@@ -20,9 +20,9 @@ This works well when the consumer only needs to customize the input control (Per
 
 | Persona              | Wants                                     | Supported |
 | -------------------- | ----------------------------------------- | --------- |
-| 1 — Default UI       | Everything from MakeForm                  | ✅         |
-| 2 — Design System    | Own label, error, layout, input           | ❌         |
-| 3 — Custom Component | MakeForm label/error/layout, custom input | ✅         |
+| 1 — Default UI       | Everything from MakeForm                  | ✅        |
+| 2 — Design System    | Own label, error, layout, input           | ❌        |
+| 3 — Custom Component | MakeForm label/error/layout, custom input | ✅        |
 
 Persona 2 currently has no extension point that grants control over label, error, or layout structure.
 
@@ -276,7 +276,7 @@ Examples:
 ```tsx
 customField({
   component: 'richText',
-})
+});
 ```
 
 Resolution:
@@ -486,8 +486,8 @@ import {
 
 Consumers only need to import:
 
-* `FieldRenderers` when defining renderer maps
-* `FieldRendererProps` when implementing complete field renderers
+- `FieldRenderers` when defining renderer maps
+- `FieldRendererProps` when implementing complete field renderers
 
 The existing `Renderers` API remains unchanged.
 
@@ -519,17 +519,9 @@ function MuiTextRenderer({ id, name, field, fieldState }: FieldRendererProps<str
 ### 7.2 Chakra UI Select
 
 ```tsx
-import {
-  Select,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-} from '@chakra-ui/react';
+import { Select, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/react';
 
-import type {
-  FieldRendererProps,
-  SelectField,
-} from '@hnpsaga/makeform';
+import type { FieldRendererProps, SelectField } from '@hnpsaga/makeform';
 
 function ChakraSelectRenderer({
   id,
@@ -538,40 +530,24 @@ function ChakraSelectRenderer({
   fieldState,
 }: FieldRendererProps<string, SelectField>) {
   return (
-    <FormControl
-      isInvalid={
-        fieldState.touched &&
-        fieldState.errors.length > 0
-      }
-    >
-      <FormLabel htmlFor={id}>
-        {field.label}
-      </FormLabel>
+    <FormControl isInvalid={fieldState.touched && fieldState.errors.length > 0}>
+      <FormLabel htmlFor={id}>{field.label}</FormLabel>
 
       <Select
         id={id}
         name={name}
         value={fieldState.value}
-        onChange={(e) =>
-          fieldState.setValue(e.target.value)
-        }
+        onChange={(e) => fieldState.setValue(e.target.value)}
       >
         {field.options.map((option) => (
-          <option
-            key={String(option.value)}
-            value={option.value}
-          >
+          <option key={String(option.value)} value={option.value}>
             {option.label}
           </option>
         ))}
       </Select>
 
       {fieldState.touched &&
-        fieldState.errors.map((error) => (
-          <FormErrorMessage key={error}>
-            {error}
-          </FormErrorMessage>
-        ))}
+        fieldState.errors.map((error) => <FormErrorMessage key={error}>{error}</FormErrorMessage>)}
     </FormControl>
   );
 }
@@ -585,25 +561,16 @@ customField<string>({
   label: 'Bio',
 });
 
-function RichTextFieldRenderer({
-  field,
-  fieldState,
-}: FieldRendererProps<string>) {
+function RichTextFieldRenderer({ field, fieldState }: FieldRendererProps<string>) {
   return (
     <div>
       <label>{field.label}</label>
 
-      <RichTextEditor
-        value={fieldState.value}
-        onChange={fieldState.setValue}
-      />
+      <RichTextEditor value={fieldState.value} onChange={fieldState.setValue} />
 
-      {fieldState.touched &&
-        fieldState.errors.length > 0 && (
-          <div role="alert">
-            {fieldState.errors[0]}
-          </div>
-        )}
+      {fieldState.touched && fieldState.errors.length > 0 && (
+        <div role="alert">{fieldState.errors[0]}</div>
+      )}
     </div>
   );
 }
@@ -614,7 +581,7 @@ function RichTextFieldRenderer({
       richText: RichTextFieldRenderer,
     },
   }}
-/>
+/>;
 ```
 
 ### 7.4 Mixed Usage — Renderers + Field Renderers
