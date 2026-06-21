@@ -6,7 +6,7 @@
     "type": "git",
     "url": "git+https://github.com/hnpsaga/makeform.git"
   },
-  "homepage": "https://github.com/hnpsaga/makeform#readme",
+  "homepage": "https://makeform-demo.vercel.app/",
   "bugs": {
     "url": "https://github.com/hnpsaga/makeform/issues"
   },
