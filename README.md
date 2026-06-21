@@ -584,6 +584,9 @@ npm run dev
 - **Profile** — Profile form with text, textarea, phone, date, and select fields
 - **Validation** — Validation showcase with required, min, max, pattern, and custom validators
 - **Features** — Overview of MakeForm features
+- **Styling** — Styling showcase with default theme, custom classNames, and utility-style customization
+- **Renderers** — Renderer override examples with custom text and select renderers
+- **Material UI** — Material UI integration via renderer overrides
 
 ---
 

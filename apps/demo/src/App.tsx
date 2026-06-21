@@ -4,8 +4,19 @@ import RegistrationForm from './pages/RegistrationForm.js';
 import ProfileForm from './pages/ProfileForm.js';
 import ValidationDemo from './pages/ValidationDemo.js';
 import Features from './pages/Features.js';
+import Styling from './pages/Styling.js';
+import Renderers from './pages/Renderers.js';
+import MuiDemo from './pages/MuiDemo.js';
 
-type Page = 'home' | 'features' | 'registration' | 'profile' | 'validation';
+type Page =
+  | 'home'
+  | 'features'
+  | 'registration'
+  | 'profile'
+  | 'validation'
+  | 'styling'
+  | 'renderers'
+  | 'mui';
 
 const navItems: { page: Page; label: string }[] = [
   { page: 'home', label: 'Home' },
@@ -13,6 +24,9 @@ const navItems: { page: Page; label: string }[] = [
   { page: 'registration', label: 'Registration' },
   { page: 'profile', label: 'Profile' },
   { page: 'validation', label: 'Validation' },
+  { page: 'styling', label: 'Styling' },
+  { page: 'renderers', label: 'Renderers' },
+  { page: 'mui', label: 'Material UI' },
 ];
 
 const pages: Record<Page, () => React.ReactNode> = {
@@ -21,6 +35,9 @@ const pages: Record<Page, () => React.ReactNode> = {
   registration: () => <RegistrationForm />,
   profile: () => <ProfileForm />,
   validation: () => <ValidationDemo />,
+  styling: () => <Styling />,
+  renderers: () => <Renderers />,
+  mui: () => <MuiDemo />,
 };
 
 export default function App() {
