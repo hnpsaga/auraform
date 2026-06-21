@@ -556,6 +556,37 @@ See GitHub issues for details.
 
 ---
 
+## Demo Application
+
+A demo application is available in `apps/demo/` demonstrating schema definition, validation, form state, submission, and dynamic rendering.
+
+### Running the Demo
+
+```bash
+# Build the library first
+npm run build
+
+# Navigate to the demo app
+cd apps/demo
+
+# Install dependencies
+npm install
+
+# Start the dev server
+npm run dev
+```
+
+### Demo Pages
+
+- **Home** — Introduction and navigation
+- **Registration** — Registration form with text, email, password, and checkbox fields
+- **Profile** — Profile form with text, textarea, phone, date, and select fields
+- **Validation** — Validation showcase with required, min, max, pattern, and custom validators
+- **Submission** — Form submission demo with blocked invalid submissions
+- **Features** — Overview of MakeForm features
+
+---
+
 ## Contributing
 
 Issues and pull requests are welcome.

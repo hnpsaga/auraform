@@ -1,0 +1,69 @@
+import { useState } from 'react';
+import Home from './pages/Home.js';
+import RegistrationForm from './pages/RegistrationForm.js';
+import ProfileForm from './pages/ProfileForm.js';
+import ValidationDemo from './pages/ValidationDemo.js';
+import SubmissionDemo from './pages/SubmissionDemo.js';
+import Features from './pages/Features.js';
+
+type Page = 'home' | 'registration' | 'profile' | 'validation' | 'submission' | 'features';
+
+const navItems: { page: Page; label: string }[] = [
+  { page: 'home', label: 'Home' },
+  { page: 'registration', label: 'Registration' },
+  { page: 'profile', label: 'Profile' },
+  { page: 'validation', label: 'Validation' },
+  { page: 'submission', label: 'Submission' },
+  { page: 'features', label: 'Features' },
+];
+
+const pages: Record<Page, () => React.ReactNode> = {
+  home: () => <Home />,
+  registration: () => <RegistrationForm />,
+  profile: () => <ProfileForm />,
+  validation: () => <ValidationDemo />,
+  submission: () => <SubmissionDemo />,
+  features: () => <Features />,
+};
+
+export default function App() {
+  const [currentPage, setCurrentPage] = useState<Page>('home');
+
+  const PageComponent = pages[currentPage];
+
+  return (
+    <div>
+      <nav
+        style={{
+          background: '#1f2937',
+          padding: '0.75rem 1rem',
+          display: 'flex',
+          gap: '1rem',
+          alignItems: 'center',
+        }}
+      >
+        <strong style={{ color: '#fff', marginRight: '0.5rem' }}>MakeForm Demo</strong>
+        {navItems.map((item) => (
+          <button
+            key={item.page}
+            onClick={() => setCurrentPage(item.page)}
+            style={{
+              background: currentPage === item.page ? '#6366f1' : 'transparent',
+              color: '#fff',
+              border: '1px solid #6366f1',
+              padding: '0.25rem 0.75rem',
+              borderRadius: '0.25rem',
+              cursor: 'pointer',
+              fontSize: '0.875rem',
+            }}
+          >
+            {item.label}
+          </button>
+        ))}
+      </nav>
+      <main style={{ padding: '1.5rem', maxWidth: '64rem', margin: '0 auto' }}>
+        <PageComponent />
+      </main>
+    </div>
+  );
+}
