@@ -29,6 +29,17 @@ export default function Home() {
           <li>
             <strong>Features</strong> — Overview of MakeForm features
           </li>
+          <li>
+            <strong>Styling</strong> — Styling showcase with default theme, custom classNames, and
+            utility-style customization
+          </li>
+          <li>
+            <strong>Renderers</strong> — Renderer override examples with custom text and select
+            renderers
+          </li>
+          <li>
+            <strong>Material UI</strong> — Material UI integration via renderer overrides
+          </li>
         </ul>
       </section>
 
