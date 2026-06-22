@@ -234,9 +234,9 @@ phone('Invalid phone number');
 When no message is provided, a default message is used.
 
 ```ts
-required()  // → "Field is required"
-min(3)      // → "Minimum length is 3"
-max(10)     // → "Maximum length is 10"
+required(); // → "Field is required"
+min(3); // → "Minimum length is 3"
+max(10); // → "Maximum length is 10"
 ```
 
 Validate manually:

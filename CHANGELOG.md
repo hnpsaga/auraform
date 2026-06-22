@@ -15,10 +15,10 @@ All notable changes to this project will be documented in this file.
 ### Examples
 
 ```ts
-required('Email is required')
-min(5, 'Minimum 5 characters')
-max(50, 'Maximum 50 characters')
-pattern(/^[a-z]+$/, 'Lowercase letters only')
+required('Email is required');
+min(5, 'Minimum 5 characters');
+max(50, 'Maximum 50 characters');
+pattern(/^[a-z]+$/, 'Lowercase letters only');
 ```
 
 No breaking changes. Existing validator usage continues to work.

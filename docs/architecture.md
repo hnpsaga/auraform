@@ -337,8 +337,8 @@ custom(fn);
 Each validator accepts an optional `message` parameter to override the default error message.
 
 ```ts
-required('Email is required')
-min(18, 'Must be 18 or older')
+required('Email is required');
+min(18, 'Must be 18 or older');
 ```
 
 When no message is provided, a descriptive default is used.
