@@ -14,17 +14,17 @@ import type { InferValues } from '@hnpsaga/makeform';
 const schema = {
   requiredField: textField({
     label: 'Required Field',
-    validators: [required()],
+    validators: [required('This field is required')],
   }),
 
   minLengthField: textField({
     label: 'Min Length (3)',
-    validators: [min(3)],
+    validators: [min(3, 'Minimum 3 characters')],
   }),
 
   maxLengthField: textField({
     label: 'Max Length (10)',
-    validators: [max(10)],
+    validators: [max(10, 'Maximum 10 characters')],
   }),
 
   patternField: textField({

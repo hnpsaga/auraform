@@ -7,17 +7,19 @@ import type { Validator } from './types.js';
  * - `number`: always passes (presence of a number is sufficient).
  * - `boolean`: always passes.
  * - `null` / `undefined`: fails.
+ *
+ * @param message Optional custom error message.
  */
-export function required<T>(): Validator<T> {
+export function required<T>(message?: string): Validator<T> {
   return (value: T): string | null => {
     if (value === null || value === undefined) {
-      return 'Field is required';
+      return message ?? 'Field is required';
     }
     if (typeof value === 'string' && value.trim() === '') {
-      return 'Field is required';
+      return message ?? 'Field is required';
     }
     if (typeof value === 'boolean' && value === false) {
-      return 'Field is required';
+      return message ?? 'Field is required';
     }
     return null;
   };
@@ -28,13 +30,16 @@ export function required<T>(): Validator<T> {
  *
  * - For `string` values: minimum character length.
  * - For `number` values: minimum numeric value.
+ *
+ * @param limit  The minimum length (string) or value (number).
+ * @param message Optional custom error message.
  */
-export function min(limit: number): Validator<string | number> {
+export function min(limit: number, message?: string): Validator<string | number> {
   return (value: string | number): string | null => {
     if (typeof value === 'string') {
-      return value.length >= limit ? null : `Minimum length is ${limit}`;
+      return value.length >= limit ? null : (message ?? `Minimum length is ${limit}`);
     }
-    return value >= limit ? null : `Minimum value is ${limit}`;
+    return value >= limit ? null : (message ?? `Minimum value is ${limit}`);
   };
 }
 
@@ -43,18 +48,24 @@ export function min(limit: number): Validator<string | number> {
  *
  * - For `string` values: maximum character length.
  * - For `number` values: maximum numeric value.
+ *
+ * @param limit  The maximum length (string) or value (number).
+ * @param message Optional custom error message.
  */
-export function max(limit: number): Validator<string | number> {
+export function max(limit: number, message?: string): Validator<string | number> {
   return (value: string | number): string | null => {
     if (typeof value === 'string') {
-      return value.length <= limit ? null : `Maximum length is ${limit}`;
+      return value.length <= limit ? null : (message ?? `Maximum length is ${limit}`);
     }
-    return value <= limit ? null : `Maximum value is ${limit}`;
+    return value <= limit ? null : (message ?? `Maximum value is ${limit}`);
   };
 }
 
 /**
  * Validates that a string value matches a regular expression.
+ *
+ * @param regex   The regular expression to test against.
+ * @param message Optional custom error message.
  */
 export function pattern(regex: RegExp, message?: string): Validator<string> {
   return (value: string): string | null => {
@@ -75,6 +86,8 @@ export function custom<T>(fn: (value: T) => string | null): Validator<T> {
 
 /**
  * Validates a standard email format.
+ *
+ * @param message Optional custom error message.
  */
 export function email(message?: string): Validator<string> {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -85,6 +98,8 @@ export function email(message?: string): Validator<string> {
 
 /**
  * Validates a simple phone number format.
+ *
+ * @param message Optional custom error message.
  */
 export function phone(message?: string): Validator<string> {
   const phoneRegex = /^\+?[0-9\s\-()]{7,20}$/;

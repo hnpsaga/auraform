@@ -107,6 +107,7 @@ function RichTextFieldRenderer({ id, field, fieldState }: FieldRendererProps<str
       <div
         data-testid="fr-custom-input"
         contentEditable
+        suppressContentEditableWarning
         onInput={(e) => fieldState.setValue((e.target as HTMLElement).textContent || '')}
       >
         {fieldState.value}

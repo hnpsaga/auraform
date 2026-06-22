@@ -153,12 +153,12 @@ Example:
 const schema = {
   name: textField({
     label: 'Name',
-    validators: [required()],
+    validators: [required('Name is required')],
   }),
 
   age: numberField({
     label: 'Age',
-    validators: [min(18)],
+    validators: [min(18, 'Must be 18 or older')],
   }),
 };
 ```
@@ -325,14 +325,23 @@ string    → invalid
 MakeForm includes:
 
 ```ts
-required();
-min();
-max();
-pattern();
-email();
-phone();
-custom();
+required(message?);
+min(limit, message?);
+max(limit, message?);
+pattern(regex, message?);
+email(message?);
+phone(message?);
+custom(fn);
 ```
+
+Each validator accepts an optional `message` parameter to override the default error message.
+
+```ts
+required('Email is required');
+min(18, 'Must be 18 or older');
+```
+
+When no message is provided, a descriptive default is used.
 
 ---
 

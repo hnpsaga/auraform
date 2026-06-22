@@ -56,17 +56,17 @@ Define your form structure in one place.
 const schema = {
   name: textField({
     label: 'Full Name',
-    validators: [required()],
+    validators: [required('Name is required')],
   }),
 
   email: emailField({
     label: 'Email Address',
-    validators: [required(), email()],
+    validators: [required('Email is required'), email()],
   }),
 
   age: numberField({
     label: 'Age',
-    validators: [min(18)],
+    validators: [min(18, 'Must be 18 or older')],
   }),
 };
 ```
@@ -190,12 +190,12 @@ Schemas define field types, labels, default values, validation rules, and render
 const schema = {
   firstName: textField({
     label: 'First Name',
-    validators: [required()],
+    validators: [required('First name is required')],
   }),
 
   age: numberField({
     label: 'Age',
-    validators: [min(18)],
+    validators: [min(18, 'Minimum age is 18')],
   }),
 };
 ```
@@ -220,6 +220,25 @@ const schema = {
 };
 ```
 
+Each validator accepts an optional custom error message.
+
+```ts
+required('Password is required');
+min(8, 'Password must be at least 8 characters');
+max(50, 'Password must be at most 50 characters');
+pattern(/^[a-zA-Z]+$/, 'Letters only');
+email('Invalid email address');
+phone('Invalid phone number');
+```
+
+When no message is provided, a default message is used.
+
+```ts
+required(); // → "Field is required"
+min(3); // → "Minimum length is 3"
+max(10); // → "Maximum length is 10"
+```
+
 Validate manually:
 
 ```ts
@@ -233,13 +252,13 @@ if (!result.valid) {
 Built-in validators:
 
 ```ts
-required();
-min();
-max();
-pattern();
-email();
-phone();
-custom();
+required(message?);
+min(limit, message?);
+max(limit, message?);
+pattern(regex, message?);
+email(message?);
+phone(message?);
+custom(fn);
 ```
 
 ### 4. Form Submission
@@ -503,7 +522,7 @@ The form engine itself is framework agnostic. React integration is intentionally
 
 ## Status
 
-Current Release: v0.1.0
+Current Release: v0.1.2
 
 This project is actively maintained and available on [npm](https://www.npmjs.com/package/@hnpsaga/makeform).
 
