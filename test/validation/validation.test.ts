@@ -46,13 +46,11 @@ describe('required()', () => {
   });
 
   test('fails for null', () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(required<any>()(null)).toBe('Field is required');
+    expect(required<unknown>()(null)).toBe('Field is required');
   });
 
   test('fails for undefined', () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(required<any>()(undefined)).toBe('Field is required');
+    expect(required<unknown>()(undefined)).toBe('Field is required');
   });
 
   test('passes for a number (presence check)', () => {
@@ -69,6 +67,40 @@ describe('required()', () => {
 
   test('passes for true boolean', () => {
     expect(required<boolean>()(true)).toBeNull();
+  });
+
+  // ---------------------------------------------------------------------------
+  // required() — custom message
+  // ---------------------------------------------------------------------------
+
+  test('uses custom message when provided', () => {
+    const validate = required<string>('Email is required');
+    expect(validate('')).toBe('Email is required');
+    expect(validate('   ')).toBe('Email is required');
+  });
+
+  test('uses custom message for null and undefined', () => {
+    const validate = required<unknown>('Value must be provided');
+    expect(validate(null)).toBe('Value must be provided');
+    expect(validate(undefined)).toBe('Value must be provided');
+  });
+
+  test('uses custom message for false boolean', () => {
+    expect(required<boolean>('Must be checked')(false)).toBe('Must be checked');
+  });
+
+  test('returns null when valid even with custom message', () => {
+    expect(required<string>('Email is required')('hello')).toBeNull();
+    expect(required<number>('Required')(0)).toBeNull();
+    expect(required<boolean>('Required')(true)).toBeNull();
+  });
+
+  test('uses default message when undefined is passed explicitly', () => {
+    expect(required<string>(undefined)('')).toBe('Field is required');
+  });
+
+  test('uses empty string when empty string is passed as message', () => {
+    expect(required<string>('')('')).toBe('');
   });
 });
 
@@ -110,6 +142,28 @@ describe('min() for numbers', () => {
   test('fails for negative value against positive limit', () => {
     expect(min(0)(-1)).toBe('Minimum value is 0');
   });
+
+  // ---------------------------------------------------------------------------
+  // min() — custom message
+  // ---------------------------------------------------------------------------
+
+  test('uses custom message for string when provided', () => {
+    expect(min(3, 'Minimum 3 chars')('ab')).toBe('Minimum 3 chars');
+  });
+
+  test('uses custom message for number when provided', () => {
+    expect(min(18, 'Must be 18 or older')(15)).toBe('Must be 18 or older');
+  });
+
+  test('returns null when valid even with custom message', () => {
+    expect(min(3, 'Minimum 3 chars')('abc')).toBeNull();
+    expect(min(18, 'Must be 18 or older')(20)).toBeNull();
+  });
+
+  test('uses default message when undefined is passed as message', () => {
+    expect(min(3, undefined)('ab')).toBe('Minimum length is 3');
+    expect(min(18, undefined)(15)).toBe('Minimum value is 18');
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -145,6 +199,28 @@ describe('max() for numbers', () => {
 
   test('fails when value exceeds limit', () => {
     expect(max(100)(101)).toBe('Maximum value is 100');
+  });
+
+  // ---------------------------------------------------------------------------
+  // max() — custom message
+  // ---------------------------------------------------------------------------
+
+  test('uses custom message for string when provided', () => {
+    expect(max(5, 'Maximum 5 chars')('toolong')).toBe('Maximum 5 chars');
+  });
+
+  test('uses custom message for number when provided', () => {
+    expect(max(100, 'Max 100 allowed')(101)).toBe('Max 100 allowed');
+  });
+
+  test('returns null when valid even with custom message', () => {
+    expect(max(5, 'Maximum 5 chars')('hi')).toBeNull();
+    expect(max(100, 'Max 100 allowed')(50)).toBeNull();
+  });
+
+  test('uses default message when undefined is passed as message', () => {
+    expect(max(5, undefined)('toolong')).toBe('Maximum length is 5');
+    expect(max(100, undefined)(101)).toBe('Maximum value is 100');
   });
 });
 
@@ -246,6 +322,25 @@ describe('validateField()', () => {
     expect(errors[0]).toBe('Minimum length is 5');
     expect(errors[1]).toBe('Maximum length is 1');
     expect(errors[2]).toBe('Custom error');
+  });
+
+  test('returns custom messages through validateField with mixed validators', () => {
+    const errors = validateField('', [
+      required<string>('Email required'),
+      min(5, 'Minimum 5 chars'),
+    ]);
+    expect(errors).toHaveLength(2);
+    expect(errors).toContain('Email required');
+    expect(errors).toContain('Minimum 5 chars');
+  });
+
+  test('propagates custom messages through validateField for numbers', () => {
+    const errors = validateField(15, [
+      min(18, 'Must be 18 or older'),
+      max(65, 'Must be 65 or younger'),
+    ]);
+    expect(errors).toHaveLength(1);
+    expect(errors[0]).toBe('Must be 18 or older');
   });
 });
 
@@ -376,5 +471,24 @@ describe('validateForm()', () => {
     };
     const result = validateForm(schema, { name: '' });
     expect(result.valid).toBe(true);
+  });
+
+  test('returns custom messages through validateForm when specified', () => {
+    const schema = {
+      email: textField({ validators: [required('Email is required')] }),
+      password: textField({ validators: [min(8, 'Password must be at least 8 characters')] }),
+    };
+    const result = validateForm(schema, { email: '', password: 'short' });
+    expect(result.valid).toBe(false);
+    expect(result.errors['email']).toContain('Email is required');
+    expect(result.errors['password']).toContain('Password must be at least 8 characters');
+  });
+
+  test('returns default messages through validateForm when no custom message specified', () => {
+    const schema = {
+      name: textField({ validators: [required()] }),
+    };
+    const result = validateForm(schema, { name: '' });
+    expect(result.errors['name']).toContain('Field is required');
   });
 });

@@ -26,11 +26,12 @@ function RichTextRenderer({ value, setValue }: CustomFieldRendererProps<string>)
       <div
         data-testid="rich-text"
         contentEditable
+        suppressContentEditableWarning
         onInput={(e) => setValue((e.target as HTMLElement).textContent || '')}
       >
         {value}
       </div>
-      <input type="hidden" data-testid="rich-text-value" value={value} readOnly />
+      <input type="hidden" data-testid="rich-text-value" value={value ?? ''} readOnly />
     </div>
   );
 }
@@ -41,7 +42,7 @@ function LocationRenderer({ value, setValue }: CustomFieldRendererProps<string>)
       <input
         data-testid="location-input"
         type="text"
-        value={value}
+        value={value ?? ''}
         onChange={(e) => setValue(e.target.value)}
       />
     </div>
